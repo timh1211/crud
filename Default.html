@@ -36,6 +36,7 @@
 							<td colspan="100%"></td>
 						</tr>
 					</thead>
+					<!-- Tbody se add vao day -->
 				</table>
 			</div>
 		</div>
@@ -57,7 +58,7 @@
 					Product Information
 					</div>
 					<div class="panel-body">
-					<!---->
+					<input type="hidden" id="productid" value="0" />
 						<div class="form-group">
 							<label for="productname">Product Name</label>
 							<input type="text" id="productname" class="form-control"/>
@@ -70,7 +71,6 @@
 							<label for="url">URL</label>
 							<input type="url" id="url" class="form-control"/>
 						</div>
-					<!---->	
 					</div>
 					<div class="panel-footer">
 						<div class="row">
@@ -141,7 +141,7 @@
 				 "<button type='button' " +
 				 "onclick='productGet(this);' " +
 				 "class='btn btn-default' " +
-				 "data-id='" + product.ProductId + "'>" +
+				 "data-id='" + product.ProductID + "'>" +
 				 "<span class='glyphicon glyphicon-edit' />" +
 			     "</button>" +
 			 "</td >" +
@@ -162,12 +162,42 @@
 		  }
 		  alert(msg);
 		}
+		
 		//productList(); như vậy vẫn đc nhưng ko đảm bảo nó sẽ chạy khi tất cả thành phần trong trang đã hiện lên
 		//vì vậy cần phải bỏ vào ready
 		$(document).ready(function () {
 		  productList();
 		});
 		//các thành phần trong trang script, cần để trong khối ready để tranh việc bị lỗi do browser sẽ load hàm ngoài $ready thì sẽ bị lỗi
+		//
+		function productGet(ctl) {
+		  // Get product id from data- attribute
+		  var id = $(ctl).data("id");
+			  
+		  // Store product id in hidden field
+		  $("#productid").val(id);
+			  
+		  // Call Web API to get a list of Products
+		  $.ajax({
+			url: "/product" + id + ".json",
+			type: 'GET',
+			dataType: 'json',
+			success: function (product) {
+			  productToFields(product);
+			  
+			  // Change Update Button Text
+			  $("#updateButton").text("Update");
+			},
+			error: function (request, message, error) {
+			  handleException(request, message, error);
+			}
+		  });
+		}
+		function productToFields(product) {
+		  $("#productname").val(product.ProductName);
+		  $("#introdate").val(product.IntroductionDate);
+		  $("#url").val(product.Url);
+		}
 	</script>
 </body>
 </html>
