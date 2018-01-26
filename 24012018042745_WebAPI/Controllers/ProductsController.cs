@@ -11,28 +11,29 @@ namespace _24012018042745_WebAPI.Controllers
 {
     public class ProductsController : ApiController
     {
+        private ProductContext db = new ProductContext();
         [HttpGet()]
         public IHttpActionResult Get()
         {
             IHttpActionResult ret = null;
             List<Product> list = new List<Product>();
-            list = CreateMockData();
+            list = db.Products.ToList();
             ret = Ok(list);
             return ret;
         }
         [HttpGet()]
         public IHttpActionResult Get(int id)
         {
-            IHttpActionResult ret = null;
-            List<Product> list = new List<Product>();
-            list = CreateMockData();
-            if (list.Count > 0)
+            IHttpActionResult ret;
+            Product prod = new Product();
+            prod = db.Products.Where(p=>p.ProductId.Equals(id)).First();
+            if (prod == null)
             {
-                ret = Ok(list);
+                ret = NotFound();
             }
             else
             {
-                ret = NotFound();
+                ret = Ok(prod);
             }
             return ret;
         }
@@ -51,7 +52,7 @@ namespace _24012018042745_WebAPI.Controllers
             {
                 ProductId = 2,
                 ProductName = "Build your own Bootstrap BusinessApplication Template in MVC",
-              IntroductionDate = Convert.ToDateTime("1/31/2017"),
+                IntroductionDate = Convert.ToDateTime("1/31/2017"),
                 Url = "http://bit.ly/1I8ZqZg"
             });
 
@@ -59,7 +60,7 @@ namespace _24012018042745_WebAPI.Controllers
             {
                 ProductId = 3,
                 ProductName = "Building Mobile Web Sites Using Web Forms Bootstrapand HTML5",
-              IntroductionDate = Convert.ToDateTime("8/2/2017"),
+                IntroductionDate = Convert.ToDateTime("8/2/2017"),
                 Url = "http://bit.ly/1J2dcrj"
             });
 

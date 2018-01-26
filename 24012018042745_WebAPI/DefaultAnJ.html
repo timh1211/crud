@@ -44,7 +44,7 @@
                     <tbody>
                         <tr ng-repeat="x in products">
                             <td>
-                                <button type='button' ng-click='productGet(x.ProductID);' class='btn btn-default'>
+                                <button type='button' ng-click='productGet(x.ProductId);' class='btn btn-default'>
                                     <span class='glyphicon glyphicon-edit' />
                                 </button>
                             </td>
@@ -52,7 +52,7 @@
                             <td>{{x.IntroductionDate}}</td>
                             <td>{{x.Url}}</td>
                             <td>
-                                <button type='button' ng-click='productDelete(x.ProductID);' class="btn btn-default">
+                                <button type='button' ng-click='productDelete(x.ProductId);' class="btn btn-default">
                                     <span class='glyphicon glyphicon-remove' />
                                 </button>
                             </td>
@@ -107,13 +107,15 @@
     <script>
         var app = angular.module("myApp", []);
         app.controller("myCtrl", function ($scope, $http) {
+            $scope.add = "Add";
+            $scope.loading = true;
             $http.get("api/Products").then(function (response) {
                 $scope.products = response.data;
                 $scope.loading = false;
             });
 
             $scope.productGet = function (id) {
-                $http.get("api/product" + id).then(function (response) {
+                $http.get("api/Products/" + id).then(function (response) {
                     $scope.product = response.data;
                     $scope.product.IntroductionDate = new Date(
                         response.data.IntroductionDate);
