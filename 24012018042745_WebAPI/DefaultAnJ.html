@@ -131,24 +131,27 @@
 
             $scope.updateClick = function () {
                 if ($scope.product.ProductID == 0) {
-                    $scope.products.push($scope.product);
-                    $scope.addClick();
-                } else {
-                    var index = $scope.products.findIndex(a => a.ProductID == $scope.product.ProductID);
-                    $scope.products[index] == $scope.product;
+                    $http.post("api/Products", $scope.product).then(function (response) {
+                        $scope.products.push(response.data);
+                        $scope.addClick();
+                    });
+                }
+                else {
+                    var index = $scope.products.findIndex(item => item.ProductID == $scope.product.ProductID);
+                    $scope.product[index] = $scope.product;
                     $scope.addClick();
                 }
             };
 
-            $scope.productDelete = function (id) {
-                //$http.delete("").then(...)
-                var index = $scope.products.findIndex(a => a.ProductID == $scope.product.ProductID);
-                $scope.products.splice(id, 1);
-            };
+                $scope.productDelete = function (id) {
+                    //$http.delete("").then(...)
+                    var index = $scope.products.findIndex(a => a.ProductID == $scope.product.ProductID);
+                    $scope.products.splice(id, 1);
+                };
 
-            $scope.product = new Object();
-            $scope.product.ProductID = 0;
-        });
+                $scope.product = new Object();
+                $scope.product.ProductID = 0;
+            });
     </script>
 </body>
 </html>
