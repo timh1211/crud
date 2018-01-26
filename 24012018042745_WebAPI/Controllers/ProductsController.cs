@@ -20,6 +20,22 @@ namespace _24012018042745_WebAPI.Controllers
             ret = Ok(list);
             return ret;
         }
+        [HttpGet()]
+        public IHttpActionResult Get(int id)
+        {
+            IHttpActionResult ret = null;
+            List<Product> list = new List<Product>();
+            list = CreateMockData();
+            if (list.Count > 0)
+            {
+                ret = Ok(list);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+            return ret;
+        }
         private List<Product> CreateMockData()
         {
             List<Product> ret = new List<Product>();
